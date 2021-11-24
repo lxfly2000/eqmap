@@ -87,7 +87,7 @@ class EqEntry{
     il_alpha=255;
     il_red=(int)(255.0f*exp(depth*(-0.02f)));
     il_green=(int)(16.0f*exp(depth*(-0.02f)));
-    il_blue=(int)(8.0f*exp(depth*(-0.02f)));;
+    il_blue=(int)(8.0f*exp(depth*(-0.02f)));
     il_frameLeft=90;
     if(magnitude>=param.minLogMagnitude){
       il_summary=String.format("%2d-%2d %2d:%02d%6.1f°%5.1f° %s%3.1f %3.0fkm ",
