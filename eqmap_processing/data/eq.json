@@ -1,0 +1,16 @@
+{
+    "bgMap":"eqbase.png",
+    "dataSrc":"eq20002010.csv",
+    "minutesPerFrame":360,
+    "startDate":"2000/1/1",
+    "endDate":"2010/1/1",
+    "showLogPoint":true,
+    "timeZoneDesc":" GMT",
+    "showLogStr":true,
+    "startLongitude":51.3,
+    "endLongitude":163.7,
+    "startLatitude":2.24,
+    "endLatitude":54.4,
+    "minLogMagnitude":5.5f,
+    "recordMode":false
+}

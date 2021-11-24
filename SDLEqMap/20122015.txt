@@ -1,0 +1,10 @@
+EastAsiaGeographNoInfo.png
+EqLog.csv
+120
+0
+2012-1-1
+2015-1-1
+1
+0
+0
+51.3 163.7 54.4 2.24

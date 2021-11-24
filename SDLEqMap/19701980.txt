@@ -1,0 +1,11 @@
+EastAsiaGeographNoInfo.png
+..\eqmap_processing\data\eq19701980.csv
+360
+3
+1970-1-1
+1980-1-1
+1
+0
+1
+51.3 163.7 54.4 2.24
+1

@@ -1,0 +1,10 @@
+EastAsiaGeographNoInfo.png
+EqData20082013.csv
+180
+2
+2008-1-1
+2014-1-1
+1
+1
+1
+51.3 163.7 54.4 2.24
