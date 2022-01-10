@@ -3,6 +3,7 @@ int captionNumber=0,lastCaptionNumber=0;
 
 void setup(){
   size(1280,720);
+  pixelDensity(displayDensity());
   fontRegular=createFont("思源黑体 HW",22.0f);
   fontBold=createFont("思源黑体 HW Bold",22.0f);
 }
@@ -80,9 +81,19 @@ void caption1(){
 
 void DrawCircle(float x,float y,float magnitude,float depth){
   //图形部分
-  stroke((int)(255.0f*exp(0*(-0.02f))),(int)(16.0f*exp(0*(-0.02f))),(int)(8.0f*exp(0*(-0.02f))));
+  strokeWeight(3.0f);
+  stroke(255,255,255);
   noFill();
   float radius=3.54f*exp(0.45f*magnitude);
+  circle(x,y,radius*2.0f);
+  translate(x,y);
+  rotate(radians(0.38f*sqrt(80.0f*depth)));
+  line(0,0,radius,0);
+  resetMatrix();
+  strokeWeight(2.5f);
+  stroke((int)(255.0f*exp(depth*(-0.02f))),(int)(16.0f*exp(depth*(-0.02f))),(int)(8.0f*exp(depth*(-0.02f))));
+  noFill();
+  //float radius=3.54f*exp(0.45f*magnitude);
   circle(x,y,radius*2.0f);
   translate(x,y);
   rotate(radians(0.38f*sqrt(80.0f*depth)));
@@ -113,7 +124,7 @@ void caption2(){
   float smpMags[]={3,4,5,7,8.7f};
   for(int i=0;i<5;i++){
     textFont(fontBold);
-    strokeWeight(3);
+    //strokeWeight(3);
     DrawCircle(width*(i+1)/6,top+150,smpMags[i],0);
   }
   for(int i=0;i<5;i++){

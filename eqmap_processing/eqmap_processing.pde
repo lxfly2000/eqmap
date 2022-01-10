@@ -253,7 +253,7 @@ void draw(){
   lastStatLineX=slx;
   lastStatLineY=sly;
   //显示圆圈图示
-  strokeWeight(2.5f);
+  //strokeWeight(2.5f);
   //……图形部分
   for(int i=eqDismissIndex;i<eqIndex;i++){
     EqEntry eqe=eq.get(i);
@@ -261,10 +261,20 @@ void draw(){
     if(eqe.magnitude<minCircleMagnitude){
       continue;//小于minCircleMagnitude级的就没必要显示了
     }
-    stroke(eqe.il_red,eqe.il_green,eqe.il_blue,eqe.il_alpha);
     noFill();
-    circle(eqe.il_posX,eqe.il_posY,eqe.il_radius*2.0f);
+    //阴影
+    strokeWeight(3.0f);
     translate(eqe.il_posX,eqe.il_posY);
+    stroke(255,255,255,eqe.il_alpha);
+    circle(0,0,eqe.il_radius*2.0f);
+    rotate(radians(eqe.il_rotation));
+    line(0,0,eqe.il_radius,0);
+    resetMatrix();
+    //主图示
+    strokeWeight(2.5f);
+    translate(eqe.il_posX,eqe.il_posY);
+    stroke(eqe.il_red,eqe.il_green,eqe.il_blue,eqe.il_alpha);
+    circle(0,0,eqe.il_radius*2.0f);
     rotate(radians(eqe.il_rotation));
     line(0,0,eqe.il_radius,0);
     resetMatrix();
