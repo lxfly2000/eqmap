@@ -9,9 +9,11 @@ ffmpeg -f lavfi -i anullsrc=channel_layout=stereo:sample_rate=44100 -loop 1 -f i
 ffmpeg -f lavfi -i anullsrc=channel_layout=stereo:sample_rate=44100 -loop 1 -f image2 -i Captions\frames\f-3.png -r 60 -t 5 -shortest -vf fade=in:0:12 cap3.mp4
 ::这个方法不需要翻转视频。
 ffmpeg -f image2 -framerate 60 -i eqmap_processing\frames\f-%%05d.tga -i SDLEqMap\audio.wav -shortest -af apad eqmap.mp4
+ffmpeg -f image2 -framerate 60 -i depth\frames\f-%%05d.tga depth.mp4
 ::拼接视频
-(echo file 'cap0.mp4'&echo file 'cap1.mp4'&echo file 'cap2.mp4'&echo file 'eqmap.mp4'&echo file 'cap3.mp4')>list.txt
+(echo file 'cap0.mp4'&echo file 'cap1.mp4'&echo file 'cap2.mp4'&echo file 'eqmap.mp4'&echo file 'depth.mp4'&echo file 'cap3.mp4')>list.txt
 ffmpeg -f concat -safe 0 -i list.txt -vcodec libx264 -preset veryslow -profile:v high -level:v 4.1 -pix_fmt yuv420p out.mp4
 del list.txt
 del cap*.mp4
 del eqmap.mp4
+del depth.mp4
