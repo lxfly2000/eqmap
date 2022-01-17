@@ -360,6 +360,9 @@ void draw(){
   text(timeStr,30,60);
   if(frameCount>60&&endDateTime.after(nowDateTime)){
     nowDateTime.add(GregorianCalendar.MINUTE,param.minutesPerFrame);
+    if(nowDateTime.after(endDateTime)){
+      nowDateTime=endDateTime;
+    }
     elapsedMinutes+=param.minutesPerFrame;
   }  
   if(frameCount%60==0){

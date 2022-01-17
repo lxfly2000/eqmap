@@ -383,6 +383,9 @@ void draw(){
   textAlign(LEFT);
   if(frameCount>60&&endDateTime.after(nowDateTime)){
     nowDateTime.add(GregorianCalendar.MINUTE,param.minutesPerFrame);
+    if(nowDateTime.after(endDateTime)){
+      nowDateTime=endDateTime;
+    }
     elapsedMinutes+=param.minutesPerFrame;
     if(frameLeftStrTotalCount>0){
       String strTotalCount="(地震计数/TotalCount)";
