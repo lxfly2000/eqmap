@@ -15,6 +15,8 @@ class Param{
   float startLongitude,endLongitude,startLatitude,endLatitude;
   boolean recordMode;
   float minLogMagnitude;
+  float minCircleMagnitude;
+  float minCircleDigitMagnitude;
   Param(){
     JSONObject json=loadJSONObject("../eqmap_processing/data/eq.json");
     bgMap="../SDLEqMap/EastAsiaGeographNoInfo.png";
@@ -30,6 +32,8 @@ class Param{
     startLatitude=json.getFloat("startLatitude",2.24f);
     endLatitude=json.getFloat("endLatitude",54.4f);
     minLogMagnitude=json.getFloat("minLogMagnitude",5.0f);
+    minCircleMagnitude=json.getFloat("minCircleMagnitude",2.0f);
+    minCircleDigitMagnitude=json.getFloat("minCircleDigitMagnitude",3.5f);
     recordMode=json.getBoolean("recordMode",false);
   }
 }
@@ -144,7 +148,6 @@ int timeShadowDistance=4;
 int counterShadowDistance=3;
 int logShadowDistance=3;
 ArrayList<Integer>logStrIndices;
-float minCircleMagnitude=2.0f;
 
 void setup(){
   size(1280,720);
@@ -154,7 +157,7 @@ void setup(){
   depthRectCalc.Init();
   //Load Map
   bg=loadImage(param.bgMap);
-  bg.resize(width*displayDensity(),height*displayDensity());
+  bg.resize(pixelWidth,pixelHeight);
   //Create Graphics
   statLine=createGraphics(width,height);
   statLineShadow=createGraphics(width,height);
@@ -194,7 +197,7 @@ void setup(){
         if(depthRectCalc.wmBottom<e.depth){
           depthRectCalc.wmBottom=e.depth;
         }
-        //if(e.magnitude>=minCircleMagnitude){
+        //if(e.magnitude>=param.minCircleMagnitude){
           eq.add(0,e);
         //}
       }
@@ -262,7 +265,7 @@ void draw(){
   while(eqIndex<eq.size()&&eq.get(eqIndex).dateTime.before(nowDateTime)){
     EqEntry eqe=eq.get(eqIndex);
     //Add a eq point.
-    if(param.showLogPoint&&eqe.magnitude>=minCircleMagnitude){//小于minCircleMagnitude级的就没必要显示了
+    if(param.showLogPoint&&eqe.magnitude>=param.minCircleMagnitude){//小于param.minCircleMagnitude级的就没必要显示了
         statPoint.beginDraw();
         statPoint.noStroke();
         statPoint.fill(color(240, 240, 12, 128));
@@ -277,8 +280,8 @@ void draw(){
         }
       }
     }
-    //播放声音，只播放大于minCircleMagnitude级的
-    if(eqe.magnitude>=minCircleMagnitude&&sfx.size()>0){
+    //播放声音，只播放大于param.minCircleMagnitude级的
+    if(eqe.magnitude>=param.minCircleMagnitude&&sfx.size()>0){
       sfx.get(0).play(1.0f-0.5f*eqe.il_rotation/90.0f,2.0f*eqe.il_posX/width-1.0f,min(200.0f,eqe.il_radius)/200.0f);
     }
     eqIndex++;
@@ -293,8 +296,8 @@ void draw(){
   for(int i=eqDismissIndex;i<eqIndex;i++){
     EqEntry eqe=eq.get(i);
     eqe.il_alpha=255*min(50,eqe.il_frameLeft)/50;
-    if(eqe.magnitude<minCircleMagnitude){
-      continue;//小于minCircleMagnitude级的就没必要显示了
+    if(eqe.magnitude<param.minCircleMagnitude){
+      continue;//小于param.minCircleMagnitude级的就没必要显示了
     }
     noFill();
     //阴影
@@ -328,8 +331,8 @@ void draw(){
         if(eqe.il_frameLeft<=0){
           eqDismissIndex++;
         }
-        if(eqe.magnitude<3.5f){
-          continue;//小于3.5级的就没必要显示了
+        if(eqe.magnitude<param.minCircleDigitMagnitude){
+          continue;//小于param.minCircleDigitMagnitude级的就没必要显示了
         }
         textSize(eqe.il_fszMag);
         fill(32,32,6,eqe.il_alpha);

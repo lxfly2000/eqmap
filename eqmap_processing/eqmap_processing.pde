@@ -15,6 +15,8 @@ class Param{
   float startLongitude,endLongitude,startLatitude,endLatitude;
   boolean recordMode;
   float minLogMagnitude;
+  float minCircleMagnitude;
+  float minCircleDigitMagnitude;
   Param(){
     JSONObject json=loadJSONObject("eq.json");
     bgMap=json.getString("bgMap","bg.png");
@@ -30,6 +32,8 @@ class Param{
     startLatitude=json.getFloat("startLatitude",2.24f);
     endLatitude=json.getFloat("endLatitude",54.4f);
     minLogMagnitude=json.getFloat("minLogMagnitude",5.0f);
+    minCircleMagnitude=json.getFloat("minCircleMagnitude",2.0f);
+    minCircleDigitMagnitude=json.getFloat("minCircleDigitMagnitude",3.5f);
     recordMode=json.getBoolean("recordMode",false);
   }
 }
@@ -128,7 +132,12 @@ int timeShadowDistance=4;
 int counterShadowDistance=3;
 int logShadowDistance=3;
 ArrayList<Integer>logStrIndices;
-float minCircleMagnitude=2.0f;
+final float logStrSlideVY=1.0f;
+float logStrHeaderBottomToY;
+float logStrHeaderBottomCurrentY;
+final int maxLogStrIndices=5;
+ArrayList<Float>logStrEntryY;
+final float clipYOffset=2.0f;
 
 void setup(){
   size(1280,720);
@@ -138,7 +147,7 @@ void setup(){
   webMercatorCalc.Init();
   //Load Map
   bg=loadImage(param.bgMap);
-  bg.resize(width*displayDensity(),height*displayDensity());
+  bg.resize(pixelWidth,pixelHeight);
   //Create Graphics
   statLine=createGraphics(width,height);
   statLineShadow=createGraphics(width,height);
@@ -175,7 +184,7 @@ void setup(){
         reader.close();
       }else if(Character.isDigit(line.charAt(0))){
         EqEntry e=new EqEntry(line);
-        //if(e.magnitude>=minCircleMagnitude){
+        //if(e.magnitude>=param.minCircleMagnitude){
           eq.add(0,e);
         //}
       }
@@ -200,8 +209,10 @@ void setup(){
   println("注意：导出的MOV视频需要经过FFmpeg做一次翻转处理！");
   println("ffmpeg -i video.mov -vf vflip video.mp4");
   logStrIndices=new ArrayList<Integer>();
+  logStrEntryY=new ArrayList<Float>();
   lastStatLineX=(int)(statLineLeft+(statLineRight-statLineLeft)*elapsedMinutes/totalMinutes);
   lastStatLineY=statLineBottom-(statLineBottom-statLineTop)*eqIndex/eq.size();
+  logStrHeaderBottomCurrentY=logStrHeaderBottomToY=logStrBottom;
 }
 
 void draw(){
@@ -209,7 +220,7 @@ void draw(){
   while(eqIndex<eq.size()&&eq.get(eqIndex).dateTime.before(nowDateTime)){
     EqEntry eqe=eq.get(eqIndex);
   	//Add a eq point.
-  	if(param.showLogPoint&&eqe.magnitude>=minCircleMagnitude){//小于minCircleMagnitude级的就没必要显示了
+  	if(param.showLogPoint&&eqe.magnitude>=param.minCircleMagnitude){//小于param.minCircleMagnitude级的就没必要显示了
         statPoint.beginDraw();
         statPoint.noStroke();
         statPoint.fill(color(240, 240, 12, 128));
@@ -219,13 +230,16 @@ void draw(){
     if(param.showLogStr){
       if(eqe.magnitude>=param.minLogMagnitude){//显示大于param.minLogMagnitude级的记录
         logStrIndices.add(eqIndex);
-        if(logStrIndices.size()>5){
-          logStrIndices.remove(0);
+        if(logStrEntryY.size()==0){
+          logStrEntryY.add(logStrBottom+fszLogStr);
+        }else{
+          logStrEntryY.add(logStrEntryY.get(logStrEntryY.size()-1)+fszLogStr);
         }
+        logStrHeaderBottomToY=logStrBottom-Math.min(maxLogStrIndices,logStrIndices.size())*fszLogStr;
       }
     }
-    //播放声音，只播放大于minCircleMagnitude级的
-    if(eqe.magnitude>=minCircleMagnitude&&sfx.size()>0){
+    //播放声音，只播放大于param.minCircleMagnitude级的
+    if(eqe.magnitude>=param.minCircleMagnitude&&sfx.size()>0){
       sfx.get(0).play(1.0f-0.5f*eqe.il_rotation/90.0f,2.0f*eqe.il_posX/width-1.0f,min(200.0f,eqe.il_radius)/200.0f);
     }
     eqIndex++;
@@ -258,8 +272,8 @@ void draw(){
   for(int i=eqDismissIndex;i<eqIndex;i++){
     EqEntry eqe=eq.get(i);
     eqe.il_alpha=255*min(50,eqe.il_frameLeft)/50;
-    if(eqe.magnitude<minCircleMagnitude){
-      continue;//小于minCircleMagnitude级的就没必要显示了
+    if(eqe.magnitude<param.minCircleMagnitude){
+      continue;//小于param.minCircleMagnitude级的就没必要显示了
     }
     noFill();
     //阴影
@@ -295,8 +309,8 @@ void draw(){
         if(eqe.il_frameLeft<=0){
           eqDismissIndex++;
         }
-        if(eqe.magnitude<3.5f){
-          continue;//小于3.5级的就没必要显示了
+        if(eqe.magnitude<param.minCircleDigitMagnitude){
+          continue;//小于param.minCircleDigitMagnitude级的就没必要显示了
         }
         textSize(eqe.il_fszMag);
         fill(32,32,6,eqe.il_alpha);
@@ -327,9 +341,10 @@ void draw(){
   if(param.showLogStr){
     textSize(fszLogStr);
     for(int i=0;i<logStrIndices.size();i++){
-      float y=logStrBottom-(logStrIndices.size()-i-1)*fszLogStr;
+      float y=logStrEntryY.get(i);
       EqEntry eqe=eq.get(logStrIndices.get(i));
       fill(40,40,40,150);
+      clip(0,logStrBottom-maxLogStrIndices*fszLogStr+logShadowDistance+clipYOffset,width,maxLogStrIndices*fszLogStr);
       text(eqe.il_summary,logStrLeft+logShadowDistance,y+logShadowDistance);
       float strWidth=textWidth(eqe.il_summary);
       float locationWidth=textWidth(eqe.location);
@@ -344,6 +359,7 @@ void draw(){
         resetMatrix();
       }
       fill(255,255,255,200);
+      clip(0,logStrBottom-maxLogStrIndices*fszLogStr+clipYOffset,width,maxLogStrIndices*fszLogStr);
       text(eqe.il_summary,logStrLeft,y);
       if(locationWidth<=spareWidth){
         text(eqe.location,logStrLeft+strWidth,y);
@@ -353,6 +369,7 @@ void draw(){
         text(eqe.location,0,0);
         resetMatrix();
       }
+      noClip();
     }
   }
   //显示记录曲线上的数字
@@ -374,10 +391,67 @@ void draw(){
       fill(255,255,255,200*min(frameLeftStrTotalCount,60)/60);
       text(strTotalCount,slx-counterShadowDistance,sly-counterShadowDistance+yOffsetCounter);
       frameLeftStrTotalCount--;
+      //右下角表头
+      if(param.showLogStr){
+        textSize(fszLogStr);
+        String hdrElements[]={"00-00","00:00","000.0°","00.0°","Ms0.0","000km",""};
+        String hdrCN[]={"日期","时间","经度","纬度","震级","深度","地点"};
+        String hdrEN[]={"DATE","TIME","LONGITUDE","LATITUDE","MAGNITUDE","DEPTH","LOCATION"};
+        //y值，左起点为logStrLeft,阴影距为logShadowDistance
+        float yCN=logStrHeaderBottomCurrentY-fszLogStr;
+        float yEN=logStrHeaderBottomCurrentY;
+        float curLeft=logStrLeft;
+        for(int i=0;i<hdrElements.length;i++){
+          textAlign(i+1==hdrElements.length?LEFT:CENTER,BASELINE);
+          float hdrWidth=textWidth(hdrElements[i]);
+          //中文阴影
+          fill(40,40,40,150*min(frameLeftStrTotalCount,60)/60);
+          text(hdrCN[i],curLeft+hdrWidth/2+logShadowDistance,yCN+logShadowDistance);
+          //中文主字
+          fill(255,255,255,200*min(frameLeftStrTotalCount,60)/60);
+          text(hdrCN[i],curLeft+hdrWidth/2,yCN);
+          float enHdrWidth=textWidth(hdrEN[i]);
+          if(enHdrWidth>hdrWidth&&i+1<hdrElements.length){
+            translate(curLeft+hdrWidth/2,yEN);
+            scale(hdrWidth/enHdrWidth,1.0f);
+            //英文阴影
+            fill(40,40,40,150*min(frameLeftStrTotalCount,60)/60);
+            text(hdrEN[i],logShadowDistance,logShadowDistance);
+            //英文主字
+            fill(255,255,255,200*min(frameLeftStrTotalCount,60)/60);
+            text(hdrEN[i],0,0);
+            resetMatrix();
+          }else{
+            //英文阴影
+            fill(40,40,40,150*min(frameLeftStrTotalCount,60)/60);
+            text(hdrEN[i],curLeft+hdrWidth/2+logShadowDistance,yEN+logShadowDistance);
+            //英文主字
+            fill(255,255,255,200*min(frameLeftStrTotalCount,60)/60);
+            text(hdrEN[i],curLeft+hdrWidth/2,yEN);
+          }
+          curLeft+=hdrWidth+textWidth(" ");
+        }
+      }
+    }
+  }
+  //右下角记录滚动
+  if(logStrEntryY.size()>0){
+    float dy=logStrSlideVY*Math.min(3.0f,(float)Math.ceil((logStrEntryY.get(logStrEntryY.size()-1)-logStrBottom)/fszLogStr));//Math.min(logStrSlideVY,logStrEntryY.get(logStrEntryY.size()-1)-logStrBottom);
+    if(logStrHeaderBottomCurrentY>logStrHeaderBottomToY){
+      logStrHeaderBottomCurrentY-=dy;
+    }
+    if(logStrEntryY.get(logStrEntryY.size()-1)>logStrBottom){
+      for(int i=0;i<logStrEntryY.size();i++){
+        logStrEntryY.set(i,logStrEntryY.get(i)-dy);
+      }
+      if(logStrEntryY.get(0)<=logStrBottom-fszLogStr*maxLogStrIndices){
+        logStrIndices.remove(0);
+        logStrEntryY.remove(0);
+      }
     }
   }
   if(frameCount%60==0){
-    surface.setTitle(String.format("FPS: %.1f",frameRate));
+    surface.setTitle(String.format("FPS: %.1f logStrEntryY:%d logStrIndices:%d",frameRate,logStrEntryY.size(),logStrIndices.size()));
   }
   if(param.recordMode&&frameCount<totalFrames+300){
     saveFrame("frames/f-#####.tga");

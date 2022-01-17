@@ -11,6 +11,8 @@
     "endLongitude":163.7,
     "startLatitude":2.24,
     "endLatitude":54.4,
-    "minLogMagnitude":5.5,
+    "minLogMagnitude":6.0,
+    "minCircleMagnitude":2.0,
+    "minCircleDigitMagnitude":3.5,
     "recordMode":false
 }
