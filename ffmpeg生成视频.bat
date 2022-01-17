@@ -31,7 +31,7 @@ ffmpeg -f image2 -framerate 60 -i cap2_tmp\%%d.png -i legend.wav -shortest -af a
 ffmpeg -f lavfi -i anullsrc=channel_layout=stereo:sample_rate=44100 -loop 1 -f image2 -i Captions\frames\f-13.png -r 60 -t 5 -shortest -vf fade=in:0:12 cap3.mp4
 ::这个方法不需要翻转视频。
 ffmpeg -f image2 -framerate 60 -i eqmap_processing\frames\f-%%05d.tga -i SDLEqMap\audio.wav -shortest -af apad eqmap.mp4
-ffmpeg -f image2 -framerate 60 -i depth\frames\f-%%05d.tga depth.mp4
+ffmpeg -f image2 -framerate 60 -i depth\frames\f-%%05d.tga -f lavfi -i anullsrc=channel_layout=stereo:sample_rate=44100 -shortest depth.mp4
 ::拼接视频
 echo file 'cap0.mp4'>list.txt
 echo file 'cap1.mp4'>>list.txt
