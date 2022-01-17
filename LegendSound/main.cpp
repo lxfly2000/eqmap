@@ -4,7 +4,7 @@
 #include <Windows.h>
 #include "AudioSample.hpp"
 
-int main(int argc,char *argv[])
+int main(int argc, char* argv[])
 {
 	if (argc < 2)
 	{
@@ -19,7 +19,7 @@ int main(int argc,char *argv[])
 	{
 		int magCur = 44100 + 44100 / 4 * i;
 		AudioSample smp = sfx;
-		smp.Pan(0.25f * i);
+		smp.Pan(0.5f * i - 1.0f);
 		smp.Volume(std::min(200.0f, 3.54f * exp(0.45f * mag[i])) / 200.0f);
 		smp.Speed(1.0f);
 		am.Seek(magCur);
@@ -29,7 +29,7 @@ int main(int argc,char *argv[])
 	{
 		int depCur = 44100 * 3 + 44100 / 4 * i;
 		AudioSample smp = sfx;
-		smp.Pan(0.25f * i);
+		smp.Pan(0.5f * i - 1.0f);
 		smp.Volume(std::min(200.0f, 3.54f * exp(0.45f * mag[3])) / 200.0f);
 		smp.Speed(1.0f - 0.5f * 0.38f * sqrtf(80.0f * depth[i]) / 90.0f);
 		am.Seek(depCur);
