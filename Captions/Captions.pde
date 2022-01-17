@@ -13,8 +13,10 @@ void draw(){
   switch(lastCaptionNumber){
     case 0:caption0();break;
     case 1:caption1();break;
-    case 2:caption2();break;
-    case 3:caption3();break;
+    case 13:caption3();break;
+  }
+  if(lastCaptionNumber>=2&&lastCaptionNumber<=12){
+    caption2(lastCaptionNumber-2);
   }
   if(captionNumber==lastCaptionNumber+1){
     saveFrame("frames/f-"+lastCaptionNumber+".png");
@@ -115,7 +117,7 @@ void DrawCircleText(float x,float y,float magnitude,float depth){
   text(String.format("%.1f",magnitude),x,y);
 }
 
-void caption2(){
+void caption2(int testSound){
   fill(255,255,255);
   textSize(48);
   textAlign(LEFT,TOP);
@@ -135,7 +137,11 @@ void caption2(){
     textFont(fontRegular);
     fill(255,255,255);
     textSize(48);
-    text(String.valueOf(smpMags[i]),width*(i+1)/6,top+250);
+    if(i+1==testSound){
+      text("["+String.valueOf(smpMags[i])+"]",width*(i+1)/6,top+250);
+    }else{
+      text(String.valueOf(smpMags[i]),width*(i+1)/6,top+250);
+    }
   }
   fill(255,255,255);
   textSize(48);
@@ -156,7 +162,11 @@ void caption2(){
     textFont(fontRegular);
     fill(255,255,255);
     textSize(48);
-    text(String.format("%dkm",smpDepths[i]),width*(i+1)/6,top+250);
+    if(i+6==testSound){
+      text("["+String.format("%dkm",smpDepths[i])+"]",width*(i+1)/6,top+250);
+    }else{
+      text(String.format("%dkm",smpDepths[i]),width*(i+1)/6,top+250);
+    }
   }
 }
 
