@@ -1,11 +1,11 @@
 {
     "bgMap":"eqbase.png",
-    "dataSrc":"eq20002010.csv",
+    "dataSrc":"ucoe.csv",
     "minutesPerFrame":360,
-    "startDate":"2000/1/1",
-    "endDate":"2010/1/1",
+    "startDate":"2010/1/1",
+    "endDate":"2020/1/1",
     "showLogPoint":true,
-    "timeZoneDesc":" GMT",
+    "timeZoneDesc":" CST",
     "showLogStr":true,
     "startLongitude":51.3,
     "endLongitude":163.7,
@@ -13,6 +13,6 @@
     "endLatitude":54.4,
     "minLogMagnitude":6.0,
     "minCircleMagnitude":2.0,
-    "minCircleDigitMagnitude":3.5,
-    "recordMode":false
+    "minCircleDigitMagnitude":4.0,
+    "recordMode":true
 }

@@ -36,13 +36,13 @@ void caption0(){
   textSize(72);
   textAlign(LEFT,TOP);
   int top=150,left=80;
-  text("中国及周边地区3级以上地震分布",left,top);
+  text("中国及周边地区地震分布",left,top);
   textSize(48);
   top+=72*1.5;
-  text("Earthquake Records in China and Nearby Regions\n(Magnitude≥3)",left,top);
+  text("Earthquake Records in China and Nearby Regions\n",left,top);
   textSize(48);
   top+=48*3*1.5;
-  text("1970-1-1 ～ 1980-1-1",left,top);
+  text("2010-1-1 ～ 2020-1-1",left,top);
 }
 
 void caption1(){
@@ -51,17 +51,20 @@ void caption1(){
   textSize(48);
   textAlign(LEFT,TOP);
   int top=55,left=50;
-  text("数据来源：国家地震科学数据中心",left,top);
+  text("数据来源：地震科学专业知识服务系统",left,top);
   textSize(36);
   top+=48*1.5;
-  text("Data Source: National Earthquake Data Center",left,top);
+  text("Data Source: Earthquake Science Knowledge Service System",left,top);
   color linkColor=color(255,227,8);
   fill(linkColor);
   top+=36*1.5;
-  String linkStr="https://data.earthquake.cn/gcywfl/index.html";
-  text(linkStr,left,top);
+  translate(left,top);
+  scale(0.85,1);
+  String linkStr="http://earthquake.ckcest.cn/dzcestsc/earthquake_tyml.html";
+  text(linkStr,0,0);
   fill(255,64,154);
-  text("(要登录/Login Required)",left+textWidth(linkStr),top);
+  text("(要登录/Login Required)",textWidth(linkStr),0);
+  resetMatrix();
   textSize(48);
   fill(255,255,255);
   top+=36*2;

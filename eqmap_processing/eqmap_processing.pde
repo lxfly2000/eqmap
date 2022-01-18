@@ -334,7 +334,7 @@ void draw(){
     param.timeZoneDesc);
   fill(40, 40, 40, 150);
   text(timeStr,30+timeShadowDistance,60+timeShadowDistance);
-  fill(255, 255, 255, 200);
+  fill(255, 255, 255, 255);
   text(timeStr,30,60);
   //显示右下角记录
   textFont(fontRegular);
@@ -358,7 +358,7 @@ void draw(){
         text(eqe.location,0,0);
         resetMatrix();
       }
-      fill(255,255,255,200);
+      fill(255,255,255,255);
       clip(0,logStrBottom-maxLogStrIndices*fszLogStr+clipYOffset,width,maxLogStrIndices*fszLogStr);
       text(eqe.il_summary,logStrLeft,y);
       if(locationWidth<=spareWidth){
@@ -378,7 +378,7 @@ void draw(){
   textAlign(RIGHT);
   fill(40,40,40,150);
   text(strCounter,slx,sly+yOffsetCounter);
-  fill(255,255,255,200);
+  fill(255,255,255,255);
   text(strCounter,slx-counterShadowDistance,sly-counterShadowDistance+yOffsetCounter);
   textAlign(LEFT);
   if(frameCount>60&&endDateTime.after(nowDateTime)){
@@ -391,13 +391,13 @@ void draw(){
       String strTotalCount="(地震计数/TotalCount)";
       fill(40,40,40,150*min(frameLeftStrTotalCount,60)/60);
       text(strTotalCount,slx,sly+yOffsetCounter);
-      fill(255,255,255,200*min(frameLeftStrTotalCount,60)/60);
+      fill(255,255,255,255*min(frameLeftStrTotalCount,60)/60);
       text(strTotalCount,slx-counterShadowDistance,sly-counterShadowDistance+yOffsetCounter);
       frameLeftStrTotalCount--;
       //右下角表头
       if(param.showLogStr){
         textSize(fszLogStr);
-        String hdrElements[]={"00-00","00:00","000.0°","00.0°","Ms0.0","000km",""};
+        String hdrElements[]={"00-00","00:00","000.0°","00.0°","M0.0","000km",""};
         String hdrCN[]={"日期","时间","经度","纬度","震级","深度","地点"};
         String hdrEN[]={"DATE","TIME","LONGITUDE","LATITUDE","MAGNITUDE","DEPTH","LOCATION"};
         //y值，左起点为logStrLeft,阴影距为logShadowDistance
@@ -411,7 +411,7 @@ void draw(){
           fill(40,40,40,150*min(frameLeftStrTotalCount,60)/60);
           text(hdrCN[i],curLeft+hdrWidth/2+logShadowDistance,yCN+logShadowDistance);
           //中文主字
-          fill(255,255,255,200*min(frameLeftStrTotalCount,60)/60);
+          fill(255,255,255,255*min(frameLeftStrTotalCount,60)/60);
           text(hdrCN[i],curLeft+hdrWidth/2,yCN);
           float enHdrWidth=textWidth(hdrEN[i]);
           if(enHdrWidth>hdrWidth&&i+1<hdrElements.length){
@@ -421,7 +421,7 @@ void draw(){
             fill(40,40,40,150*min(frameLeftStrTotalCount,60)/60);
             text(hdrEN[i],logShadowDistance,logShadowDistance);
             //英文主字
-            fill(255,255,255,200*min(frameLeftStrTotalCount,60)/60);
+            fill(255,255,255,255*min(frameLeftStrTotalCount,60)/60);
             text(hdrEN[i],0,0);
             resetMatrix();
           }else{
@@ -429,7 +429,7 @@ void draw(){
             fill(40,40,40,150*min(frameLeftStrTotalCount,60)/60);
             text(hdrEN[i],curLeft+hdrWidth/2+logShadowDistance,yEN+logShadowDistance);
             //英文主字
-            fill(255,255,255,200*min(frameLeftStrTotalCount,60)/60);
+            fill(255,255,255,255*min(frameLeftStrTotalCount,60)/60);
             text(hdrEN[i],curLeft+hdrWidth/2,yEN);
           }
           curLeft+=hdrWidth+textWidth(" ");

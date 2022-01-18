@@ -1,0 +1,11 @@
+EastAsiaGeographNoInfo.png
+..\eqmap_processing\data\ucoe.csv
+360
+5
+2010-1-1
+2020-1-1
+1
+0
+1
+51.3 163.7 54.4 2.24
+1
