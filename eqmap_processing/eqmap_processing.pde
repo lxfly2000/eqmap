@@ -279,6 +279,13 @@ void draw(){
     //阴影
     strokeWeight(3.0f);
     translate(eqe.il_posX,eqe.il_posY);
+    stroke(0,0,0,eqe.il_alpha/1.7f);
+    circle(1,1,eqe.il_radius*2.0f);
+    rotate(radians(eqe.il_rotation));
+    line(1,1,eqe.il_radius,0);
+    resetMatrix();
+    //描边
+    translate(eqe.il_posX,eqe.il_posY);
     stroke(255,255,255,eqe.il_alpha);
     circle(0,0,eqe.il_radius*2.0f);
     rotate(radians(eqe.il_rotation));
