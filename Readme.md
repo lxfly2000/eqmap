@@ -5,4 +5,4 @@
 * [Processing](https://github.com/processing/processing) - 请使用 3.5.4 版。
 
 ## 使用说明
-[请查看Wiki](https://github.com/lxfly2000/eqmap/wiki​)
+[请查看Wiki](https://github.com/lxfly2000/eqmap/wiki)
