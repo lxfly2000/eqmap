@@ -87,11 +87,13 @@ void caption1(){
 void DrawCircle(float x,float y,float magnitude,float depth){
   //图形部分
   strokeWeight(3.0f);
-  noFill();
   float radius=3.54f*exp(0.45f*magnitude);
   //阴影
   translate(x,y);
   stroke(0,0,0,150);
+  fill((int)(255.0f*exp(depth*(-0.02f))),(int)(16.0f*exp(depth*(-0.02f))),(int)(8.0f*exp(depth*(-0.02f))),255*0.25f);
+  circle(0,0,radius*2.0f);
+  noFill();
   circle(1,1,radius*2.0f);
   rotate(radians(0.38f*sqrt(80.0f*depth)));
   line(1,1,radius,0);
