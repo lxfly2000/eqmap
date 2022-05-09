@@ -312,7 +312,7 @@ void draw(){
       continue;//小于param.minCircleMagnitude级的就没必要显示了
     }
     //阴影
-    strokeWeight(3.0f);
+    strokeWeight(4.0f);
     translate(eqe.il_posX,eqe.il_posY);
     stroke(0,0,0,eqe.il_alpha/1.7f);
     fill(eqe.il_red,eqe.il_green,eqe.il_blue,eqe.il_alpha*0.25f);
