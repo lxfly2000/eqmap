@@ -272,7 +272,7 @@ float bgX1,bgX2,bgBottom;
 
 void draw(){
   clear();
-  image(bgGradient,0,0,width,height);
+  //image(bgGradient,0,0,width,height);
   image(bg,bgX1,0,bgX2,bgBottom);
   while(eqIndex<eq.size()&&eq.get(eqIndex).dateTime.before(nowDateTime)){
     EqEntry eqe=eq.get(eqIndex);
