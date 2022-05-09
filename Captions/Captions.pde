@@ -3,7 +3,7 @@ int captionNumber=0,lastCaptionNumber=0;
 
 void setup(){
   size(1280,720);
-  pixelDensity(displayDensity());
+  //pixelDensity(displayDensity());
   fontRegular=createFont("思源黑体 HW",22.0f);
   fontBold=createFont("思源黑体 HW Bold",22.0f);
 }
@@ -86,7 +86,7 @@ void caption1(){
 
 void DrawCircle(float x,float y,float magnitude,float depth){
   //图形部分
-  strokeWeight(3.0f);
+  strokeWeight(4.0f);
   float radius=3.54f*exp(0.45f*magnitude);
   //阴影
   translate(x,y);

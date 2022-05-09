@@ -141,7 +141,7 @@ final float clipYOffset=2.0f;
 
 void setup(){
   size(1280,720);
-  pixelDensity(displayDensity());
+  //pixelDensity(displayDensity());
   param=new Param();
   webMercatorCalc=new WebMercatorCalc();
   webMercatorCalc.Init();
@@ -276,7 +276,7 @@ void draw(){
       continue;//小于param.minCircleMagnitude级的就没必要显示了
     }
     //阴影
-    strokeWeight(3.0f);
+    strokeWeight(4.0f);
     translate(eqe.il_posX,eqe.il_posY);
     stroke(0,0,0,eqe.il_alpha/1.7f);
     fill(eqe.il_red,eqe.il_green,eqe.il_blue,eqe.il_alpha*0.25f);
@@ -406,7 +406,7 @@ void draw(){
       //右下角表头
       if(param.showLogStr){
         textSize(fszLogStr);
-        String hdrElements[]={"00-00","00:00","000.0°","00.0°","M0.0","000km",""};
+        String hdrElements[]={"00-00","00:00","000.0°","00.0°","Ms0.0","000km",""};
         String hdrCN[]={"日期","时间","经度","纬度","震级","深度","地点"};
         String hdrEN[]={"DATE","TIME","LONGITUDE","LATITUDE","MAGNITUDE","DEPTH","LOCATION"};
         //y值，左起点为logStrLeft,阴影距为logShadowDistance

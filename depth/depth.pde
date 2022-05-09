@@ -151,7 +151,7 @@ ArrayList<Integer>logStrIndices;
 
 void setup(){
   size(1280,720);
-  pixelDensity(displayDensity());
+  //pixelDensity(displayDensity());
   param=new Param();
   depthRectCalc=new DepthRectCalc();
   depthRectCalc.Init();
