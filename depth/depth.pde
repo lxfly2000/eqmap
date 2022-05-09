@@ -135,7 +135,7 @@ GregorianCalendar nowDateTime,endDateTime;
 PFont fontBold,fontRegular;
 float fszTime=48.0f,fszCounter=36.0f,fszLogStr=24.0f;
 PImage bg;
-PGraphics statLine,statLineShadow,statPoint,gridImage;
+PGraphics statLine,statLineShadow,statPoint,gridImage,bgGradient;
 String[]weekString={"(日/Sun)","(一/Mon)","(二/Tue)","(三/Wed)","(四/Thu)","(五/Fri)","(六/Sat)"};
 float statLineLeft=40.0f,statLineRight=1260.0f,statLineTop=40.0f,statLineBottom=700.0f;
 float logStrLeft=580.0f,logStrRight=1260.0f,logStrBottom=700.0f;
@@ -230,6 +230,7 @@ void setup(){
   lastStatLineX=(int)(statLineLeft+(statLineRight-statLineLeft)*elapsedMinutes/totalMinutes);
   lastStatLineY=statLineBottom-(statLineBottom-statLineTop)*eqIndex/eq.size();
   gridImage=createGraphics(width,height);
+  bgGradient=createGraphics(width,height);
   gridImage.beginDraw();
   gridImage.stroke(255,255,255,128);
   gridImage.strokeWeight(1);
@@ -239,13 +240,14 @@ void setup(){
   bgX2=depthRectCalc.toScreenX(depthRectCalc.wmRight);
   bgBottom=depthRectCalc.toScreenY(0.0f);
   float tw;
-  for(float d=0.0f;d<=depthRectCalc.wmBottom;d+=100.0f){
-    float y=depthRectCalc.toScreenY(d);
+  float ds[]={0.0f,10.0f,30.0f,70.0f,100.0f,200.0f,300.0f,400.0f,500.0f,600.0f,depthRectCalc.wmBottom};
+  for(int i=0;i<ds.length;i++){
+    float y=depthRectCalc.toScreenY(ds[i]);
     gridImage.line(bgX1,y,bgX2,y);
     gridImage.fill(40, 40, 40, 150);
-    gridImage.text(String.format("%.0fkm",d),bgX2+logShadowDistance,y+logShadowDistance);
+    gridImage.text(String.format("%.0fkm",ds[i]),bgX2+logShadowDistance,y+logShadowDistance);
     gridImage.fill(255,255,255,255);
-    gridImage.text(String.format("%.0fkm",d),bgX2,y);
+    gridImage.text(String.format("%.0fkm",ds[i]),bgX2,y);
   }
   tw=gridImage.textWidth("000km");
   gridImage.textFont(fontBold);
@@ -255,12 +257,22 @@ void setup(){
   gridImage.textAlign(RIGHT,BOTTOM);
   gridImage.text("东\nＥ",width-tw,height);
   gridImage.endDraw();
+  bgGradient.beginDraw();
+  bgGradient.colorMode(HSB,360,100,100);
+  bgGradient.noStroke();
+  for(float d=0.0f;d<depthRectCalc.wmBottom;d+=10.0f){
+    float y1=depthRectCalc.toScreenY(d),y2=depthRectCalc.toScreenY(d+10.0f);
+    bgGradient.fill(40*d/depthRectCalc.wmBottom,90,90*d/depthRectCalc.wmBottom);
+    bgGradient.rect(bgX1,y1,bgX2,y2);
+  }
+  bgGradient.endDraw();
 }
 
 float bgX1,bgX2,bgBottom;
 
 void draw(){
   clear();
+  image(bgGradient,0,0,width,height);
   image(bg,bgX1,0,bgX2,bgBottom);
   while(eqIndex<eq.size()&&eq.get(eqIndex).dateTime.before(nowDateTime)){
     EqEntry eqe=eq.get(eqIndex);
