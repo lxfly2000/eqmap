@@ -51,17 +51,27 @@ float MinHundredGreaterThan(float n){
 class DepthRectCalc{
   float wmLeft,wmTop,wmRight,wmBottom;
   float xLeft,xRight,yTop,yBottom;
+  boolean crossDate;
   void Init(){
     xLeft=0;
     xRight=width;
     yTop=120;
     yBottom=height;
+    if(param.endLongitude<param.startLongitude){
+      crossDate=true;
+      param.endLongitude+=360.0f;
+    }else{
+      crossDate=false;
+    }
     wmLeft=param.startLongitude;
     wmTop=0;
     wmRight=param.endLongitude;
     wmBottom=0;//最大整百数深度
   }
   float toScreenX(float longitude){
+    if(crossDate&&longitude<0.0f){
+      longitude+=360.0f;
+    }
     return xLeft+(longitude-wmLeft)*(xRight-xLeft)/(wmRight-wmLeft);
   }
   float toScreenY(float depth){

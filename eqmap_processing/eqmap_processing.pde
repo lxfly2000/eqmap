@@ -42,13 +42,23 @@ Param param;
 //Program Data
 class WebMercatorCalc{
   float wmLeft,wmTop,wmRight,wmBottom;
+  boolean crossDate;
   void Init(){
+    if(param.endLongitude<param.startLongitude){
+      crossDate=true;
+      param.endLongitude+=360.0f;
+    }else{
+      crossDate=false;
+    }
     wmLeft=(float)WebMercator.longitudeToX(param.startLongitude);
     wmTop=(float)WebMercator.latitudeToY(param.endLatitude);
     wmRight=(float)WebMercator.longitudeToX(param.endLongitude);
     wmBottom=(float)WebMercator.latitudeToY(param.startLatitude);
   }
   float toScreenX(float longitude){
+    if(crossDate&&longitude<0.0f){
+      longitude+=360.0f;
+    }
     return (float)(WebMercator.longitudeToX(longitude)-wmLeft)*width/(wmRight-wmLeft);
   }
   float toScreenY(float latitude){
