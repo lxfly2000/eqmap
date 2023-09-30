@@ -104,10 +104,10 @@ class EqEntry{
     il_blue=(int)(8.0f*exp(depth*(-0.02f)));
     il_frameLeft=90;
     if(magnitude>=param.minLogMagnitude){
-      il_summary=String.format("%2d-%2d %2d:%02d%6.1f°%5.1f° %s%3.1f %3.0fkm ",
+      il_summary=String.format("%2d-%2d %2d:%02d%6.1f°%5.1f° %s%3.1f %3.0f㎞ %s ",
       dateTime.get(GregorianCalendar.MONTH)+1,dateTime.get(GregorianCalendar.DAY_OF_MONTH),
       dateTime.get(GregorianCalendar.HOUR_OF_DAY),dateTime.get(GregorianCalendar.MINUTE),
-      longitude,latitude,unit,magnitude,depth);
+      longitude,latitude,unit,magnitude,depth,calcMaxIntStr(magnitude,depth));
       maxLogStrPxWidth=max(maxLogStrPxWidth,textWidth(il_summary));
     }
     il_strMag=String.format("%.1f",magnitude);
@@ -149,6 +149,13 @@ final int maxLogStrIndices=5;
 ArrayList<Float>logStrEntryY;
 final float clipYOffset=2.0f;
 
+String calcMaxIntStr(double magnitude, double depth){
+  String[]strInt={"０","１","２","３","４","５","６","７","８","９","10","11","12"};
+  double a = 1.65 * magnitude;
+  double b = depth < 10 ? 1.21 * Math.log10(10) : 1.21 * Math.log10(depth);
+  return strInt[Math.min(Math.max(0,(int)Math.round(a / b)),12)];
+}
+
 void setup(){
   size(1280,720);
   //pixelDensity(displayDensity());
@@ -163,8 +170,8 @@ void setup(){
   statLineShadow=createGraphics(width,height);
   statPoint=createGraphics(width,height);
   //Load Font
-  fontBold=createFont("思源黑体 HW Bold",48.0f);
-  fontRegular=createFont("思源黑体 HW",36.0f);
+  fontBold=createFont("Sarasa Mono SC Bold",48.0f);
+  fontRegular=createFont("Sarasa Mono SC",36.0f);
   //Load SFX
   sfx=new ArrayList<SoundFile>();
   eq=new ArrayList<EqEntry>();
@@ -416,9 +423,9 @@ void draw(){
       //右下角表头
       if(param.showLogStr){
         textSize(fszLogStr);
-        String hdrElements[]={"00-00","00:00","000.0°","00.0°","Ms0.0","000km",""};
-        String hdrCN[]={"日期","时间","经度","纬度","震级","深度","地点"};
-        String hdrEN[]={"DATE","TIME","LONGITUDE","LATITUDE","MAGNITUDE","DEPTH","LOCATION"};
+        String hdrElements[]={"00-00","00:00","000.0°","00.0°","Ms0.0","000km","00",""};
+        String hdrCN[]={"日期","时间","经度","纬度","震级","深度","烈度","地点"};
+        String hdrEN[]={"DATE","TIME","LONGITUDE","LATITUDE","MAGNITUDE","DEPTH","I.","LOCATION"};
         //y值，左起点为logStrLeft,阴影距为logShadowDistance
         float yCN=logStrHeaderBottomCurrentY-fszLogStr;
         float yEN=logStrHeaderBottomCurrentY;
