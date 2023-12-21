@@ -17,6 +17,7 @@ class Param{
   float minLogMagnitude;
   float minCircleMagnitude;
   float minCircleDigitMagnitude;
+  float minLogIntensity;
   Param(){
     JSONObject json=loadJSONObject("eq.json");
     bgMap=json.getString("bgMap","bg.png");
@@ -34,6 +35,7 @@ class Param{
     minLogMagnitude=json.getFloat("minLogMagnitude",5.0f);
     minCircleMagnitude=json.getFloat("minCircleMagnitude",2.0f);
     minCircleDigitMagnitude=json.getFloat("minCircleDigitMagnitude",3.5f);
+    minLogIntensity=json.getFloat("minLogIntensity",7.0f);
     recordMode=json.getBoolean("recordMode",false);
   }
 }
@@ -76,6 +78,7 @@ class EqEntry{
   float magnitude;
   String location;
   String category;
+  int intensity;
   EqEntry(String s){
     String[]parts=s.split(",");
     try{
@@ -93,6 +96,7 @@ class EqEntry{
     magnitude=Float.parseFloat(parts[5]);
     location=parts[6];
     category=parts[7];
+    intensity=calcMaxInt(magnitude,depth);
     
     il_posX=(int)webMercatorCalc.toScreenX(longitude);
     il_posY=(int)webMercatorCalc.toScreenY(latitude);
@@ -103,11 +107,11 @@ class EqEntry{
     il_green=(int)(16.0f*exp(depth*(-0.02f)));
     il_blue=(int)(8.0f*exp(depth*(-0.02f)));
     il_frameLeft=90;
-    if(magnitude>=param.minLogMagnitude){
+    if(magnitude>=param.minLogMagnitude||intensity>=param.minLogIntensity){
       il_summary=String.format("%2d-%2d %2d:%02d%6.1f°%5.1f° %s%3.1f %3.0f㎞ %s ",
       dateTime.get(GregorianCalendar.MONTH)+1,dateTime.get(GregorianCalendar.DAY_OF_MONTH),
       dateTime.get(GregorianCalendar.HOUR_OF_DAY),dateTime.get(GregorianCalendar.MINUTE),
-      longitude,latitude,unit,magnitude,depth,calcMaxIntStr(magnitude,depth));
+      longitude,latitude,unit,magnitude,depth,calcMaxIntStr(intensity));
       maxLogStrPxWidth=max(maxLogStrPxWidth,textWidth(il_summary));
     }
     il_strMag=String.format("%.1f",magnitude);
@@ -149,11 +153,15 @@ final int maxLogStrIndices=5;
 ArrayList<Float>logStrEntryY;
 final float clipYOffset=2.0f;
 
-String calcMaxIntStr(double magnitude, double depth){
-  String[]strInt={"０","１","２","３","４","５","６","７","８","９","10","11","12"};
+int calcMaxInt(double magnitude, double depth){
   double a = 1.65 * magnitude;
   double b = depth < 10 ? 1.21 * Math.log10(10) : 1.21 * Math.log10(depth);
-  return strInt[Math.min(Math.max(0,(int)Math.round(a / b)),12)];
+  return Math.min(Math.max(0,(int)Math.round(a / b)),12);
+}
+
+String calcMaxIntStr(int index){
+  String[]strInt={"０","１","２","３","４","５","６","７","８","９","10","11","12"};
+  return strInt[index];
 }
 
 void setup(){
@@ -170,8 +178,8 @@ void setup(){
   statLineShadow=createGraphics(width,height);
   statPoint=createGraphics(width,height);
   //Load Font
-  fontBold=createFont("Sarasa Mono SC Bold",48.0f);
-  fontRegular=createFont("Sarasa Mono SC",36.0f);
+  fontBold=createFont("sarasa-mono-sc-bold.ttf",48.0f);
+  fontRegular=createFont("sarasa-mono-sc-regular.ttf",36.0f);
   //Load SFX
   sfx=new ArrayList<SoundFile>();
   eq=new ArrayList<EqEntry>();
@@ -245,7 +253,7 @@ void draw(){
         statPoint.endDraw();
   	}
     if(param.showLogStr){
-      if(eqe.magnitude>=param.minLogMagnitude){//显示大于param.minLogMagnitude级的记录
+      if(eqe.magnitude>=param.minLogMagnitude||eqe.intensity>=param.minLogIntensity){//显示大于param.minLogMagnitude级的记录
         logStrIndices.add(eqIndex);
         if(logStrEntryY.size()==0){
           logStrEntryY.add(logStrBottom+fszLogStr);
@@ -423,9 +431,9 @@ void draw(){
       //右下角表头
       if(param.showLogStr){
         textSize(fszLogStr);
-        String hdrElements[]={"00-00","00:00","000.0°","00.0°","Ms0.0","000km","00",""};
+        String hdrElements[]={"00-00","00:00","000.0°","00.0°","Ms0.0","000km","0000",""};
         String hdrCN[]={"日期","时间","经度","纬度","震级","深度","烈度","地点"};
-        String hdrEN[]={"DATE","TIME","LONGITUDE","LATITUDE","MAGNITUDE","DEPTH","I.","LOCATION"};
+        String hdrEN[]={"DATE","TIME","LONGITUDE","LATITUDE","MAGNITUDE","DEPTH","SCALE","LOCATION"};
         //y值，左起点为logStrLeft,阴影距为logShadowDistance
         float yCN=logStrHeaderBottomCurrentY-fszLogStr;
         float yEN=logStrHeaderBottomCurrentY;

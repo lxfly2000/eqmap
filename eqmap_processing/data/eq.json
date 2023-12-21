@@ -1,9 +1,9 @@
 {
     "bgMap":"eqbase.png",
-    "dataSrc":"ucoe.csv",
-    "minutesPerFrame":360,
-    "startDate":"2010/1/1",
-    "endDate":"2020/1/1",
+    "dataSrc":"eq2020010120240101.csv",
+    "minutesPerFrame":180,
+    "startDate":"2020/1/1",
+    "endDate":"2023/12/21",
     "showLogPoint":true,
     "timeZoneDesc":" CST",
     "showLogStr":true,
@@ -14,5 +14,6 @@
     "minLogMagnitude":6.0,
     "minCircleMagnitude":2.0,
     "minCircleDigitMagnitude":4.0,
-    "recordMode":true
+    "minLogIntensity":7.0,
+    "recordMode":false
 }

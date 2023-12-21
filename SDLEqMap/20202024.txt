@@ -1,0 +1,11 @@
+EastAsiaGeographNoInfo.png
+../eqmap_processing/data/eq2020010120240101.csv
+180
+3
+2020-1-1
+2024-1-1
+1
+0
+1
+51.3 163.7 54.4 2.24
+1
