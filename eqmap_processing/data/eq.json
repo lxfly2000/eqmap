@@ -3,7 +3,7 @@
     "dataSrc":"eq2020010120240101.csv",
     "minutesPerFrame":180,
     "startDate":"2020/1/1",
-    "endDate":"2023/12/21",
+    "endDate":"2024/1/1",
     "showLogPoint":true,
     "timeZoneDesc":" CST",
     "showLogStr":true,
@@ -15,5 +15,5 @@
     "minCircleMagnitude":2.0,
     "minCircleDigitMagnitude":4.0,
     "minLogIntensity":7.0,
-    "recordMode":false
+    "recordMode":true
 }
