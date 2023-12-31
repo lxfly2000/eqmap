@@ -55,7 +55,7 @@ class DepthRectCalc{
   void Init(){
     xLeft=0;
     xRight=width;
-    yTop=120;
+    yTop=180;
     yBottom=height;
     if(param.endLongitude<param.startLongitude){
       crossDate=true;
@@ -75,7 +75,7 @@ class DepthRectCalc{
     return xLeft+(longitude-wmLeft)*(xRight-xLeft)/(wmRight-wmLeft);
   }
   float toScreenY(float depth){
-    depth=0.38f*sqrt(80.0f*depth)*wmBottom/90.0f;
+    depth=0.38f*sqrt(80.0f*depth)*wmBottom/90.0f;//？？？
     return yTop+(depth-wmTop)*(yBottom-yTop)/(wmBottom-wmTop);
   }
 };
@@ -109,7 +109,7 @@ class EqEntry{
     category=parts[7];
     
     il_posX=(int)depthRectCalc.toScreenX(longitude);
-    il_radius=3.54f*exp(0.45f*magnitude);
+    il_radius=5.31f*exp(0.45f*magnitude);
     il_rotation=0.38f*sqrt(80.0f*depth);
     il_alpha=255;
     il_red=(int)(255.0f*exp(depth*(-0.02f)));
@@ -143,25 +143,25 @@ ArrayList<EqEntry>eq;
 int eqIndex=0,eqDismissIndex=0;
 GregorianCalendar nowDateTime,endDateTime;
 PFont fontBold,fontRegular;
-float fszTime=48.0f,fszCounter=36.0f,fszLogStr=24.0f;
+float fszTime=72.0f,fszCounter=54.0f,fszLogStr=36.0f;
 PImage bg;
 PGraphics statLine,statLineShadow,statPoint,gridImage,bgGradient;
 String[]weekString={"(日/Sun)","(一/Mon)","(二/Tue)","(三/Wed)","(四/Thu)","(五/Fri)","(六/Sat)"};
-float statLineLeft=40.0f,statLineRight=1260.0f,statLineTop=40.0f,statLineBottom=700.0f;
-float logStrLeft=580.0f,logStrRight=1260.0f,logStrBottom=700.0f;
+float statLineLeft=60.0f,statLineRight=1890.0f,statLineTop=60.0f,statLineBottom=1050.0f;
+float logStrLeft=870.0f,logStrRight=1890.0f,logStrBottom=1050.0f;
 long totalMinutes,totalFrames;
 long elapsedMinutes=0;
 float lastStatLineX,lastStatLineY;
 int frameLeftStrTotalCount=600;
 int yOffsetCounter=-4;
-int timeShadowDistance=4;
-int counterShadowDistance=3;
-int logShadowDistance=3;
+int timeShadowDistance=6;
+int counterShadowDistance=5;
+int logShadowDistance=5;
 ArrayList<Integer>logStrIndices;
 
 void setup(){
-  size(1280,720);
-  //pixelDensity(displayDensity());
+  size(1920,1080);
+  pixelDensity(displayDensity());
   param=new Param();
   depthRectCalc=new DepthRectCalc();
   depthRectCalc.Init();
@@ -173,8 +173,8 @@ void setup(){
   statLineShadow=createGraphics(width,height);
   statPoint=createGraphics(width,height);
   //Load Font
-  fontBold=createFont("思源黑体 HW Bold",48.0f);
-  fontRegular=createFont("思源黑体 HW",36.0f);
+  fontBold=createFont("../eqmap_processing/data/sarasa-mono-sc-bold.ttf",72.0f);
+  fontRegular=createFont("../eqmap_processing/data/sarasa-mono-sc-regular.ttf",54.0f);
   //Load SFX
   sfx=new ArrayList<SoundFile>();
   eq=new ArrayList<EqEntry>();
@@ -243,7 +243,7 @@ void setup(){
   bgGradient=createGraphics(width,height);
   gridImage.beginDraw();
   gridImage.stroke(255,255,255,128);
-  gridImage.strokeWeight(1);
+  gridImage.strokeWeight(1.5f);
   gridImage.textFont(fontRegular);
   gridImage.textAlign(RIGHT,BOTTOM);
   bgX1=depthRectCalc.toScreenX(depthRectCalc.wmLeft);
@@ -270,9 +270,9 @@ void setup(){
   bgGradient.beginDraw();
   bgGradient.colorMode(HSB,360,100,100);
   bgGradient.noStroke();
-  for(float d=0.0f;d<depthRectCalc.wmBottom;d+=10.0f){
-    float y1=depthRectCalc.toScreenY(d),y2=depthRectCalc.toScreenY(d+10.0f);
-    bgGradient.fill(40*d/depthRectCalc.wmBottom,90,90*d/depthRectCalc.wmBottom);
+  for(float d=0.0f;d<depthRectCalc.wmBottom;d+=15.0f){
+    float y1=depthRectCalc.toScreenY(d),y2=depthRectCalc.toScreenY(d+15.0f);
+    bgGradient.fill(30*d/depthRectCalc.wmBottom,90,60*d/depthRectCalc.wmBottom);
     bgGradient.rect(bgX1,y1,bgX2,y2);
   }
   bgGradient.endDraw();
@@ -282,7 +282,7 @@ float bgX1,bgX2,bgBottom;
 
 void draw(){
   clear();
-  //image(bgGradient,0,0,width,height);
+  image(bgGradient,0,0,width,height);
   image(bg,bgX1,0,bgX2,bgBottom);
   while(eqIndex<eq.size()&&eq.get(eqIndex).dateTime.before(nowDateTime)){
     EqEntry eqe=eq.get(eqIndex);
@@ -291,7 +291,7 @@ void draw(){
         statPoint.beginDraw();
         statPoint.noStroke();
         statPoint.fill(color(240, 240, 12, 128));
-        statPoint.circle(eqe.il_posX,eqe.il_posY,2);
+        statPoint.circle(eqe.il_posX,eqe.il_posY,3);
         statPoint.endDraw();
     }
     if(param.showLogStr){
@@ -322,13 +322,13 @@ void draw(){
       continue;//小于param.minCircleMagnitude级的就没必要显示了
     }
     //阴影
-    strokeWeight(4.0f);
+    strokeWeight(6.0f);
     translate(eqe.il_posX,eqe.il_posY);
     stroke(0,0,0,eqe.il_alpha/1.7f);
     fill(eqe.il_red,eqe.il_green,eqe.il_blue,eqe.il_alpha*0.25f);
     circle(0,0,eqe.il_radius*2.0f);
     noFill();
-    circle(1,1,eqe.il_radius*2.0f);
+    circle(1.5f,1.5f,eqe.il_radius*2.0f);
     rotate(radians(eqe.il_rotation));
     line(1,1,eqe.il_radius,0);
     resetMatrix();
@@ -340,7 +340,7 @@ void draw(){
     line(0,0,eqe.il_radius,0);
     resetMatrix();
     //主图示
-    strokeWeight(2.5f);
+    strokeWeight(3.75f);
     translate(eqe.il_posX,eqe.il_posY);
     stroke(eqe.il_red,eqe.il_green,eqe.il_blue,eqe.il_alpha);
     circle(0,0,eqe.il_radius*2.0f);
@@ -367,7 +367,7 @@ void draw(){
         }
         textSize(eqe.il_fszMag);
         fill(32,32,6,eqe.il_alpha);
-        text(eqe.il_strMag,eqe.il_posX+2,eqe.il_posY+2);
+        text(eqe.il_strMag,eqe.il_posX+3,eqe.il_posY+3);
         fill(240,240,12,eqe.il_alpha);
         text(eqe.il_strMag,eqe.il_posX,eqe.il_posY);
       }
@@ -386,9 +386,9 @@ void draw(){
     nowDateTime.get(GregorianCalendar.MINUTE),
     param.timeZoneDesc);
   fill(40, 40, 40, 150);
-  text(timeStr,30+timeShadowDistance,60+timeShadowDistance);
+  text(timeStr,45+timeShadowDistance,90+timeShadowDistance);
   fill(255, 255, 255, 255);
-  text(timeStr,30,60);
+  text(timeStr,45,90);
   if(frameCount>60&&endDateTime.after(nowDateTime)){
     nowDateTime.add(GregorianCalendar.MINUTE,param.minutesPerFrame);
     if(nowDateTime.after(endDateTime)){

@@ -1,5 +1,5 @@
 ::指定FFmpeg所在位置
-set FFMPEG_PATH=D:\ffmpeg
+set FFMPEG_PATH=D:\ffmpeg-master-latest-win64-gpl-shared
 path %path%;%FFMPEG_PATH%\bin
 ::第一个图片为3秒，其他图片为5秒，最后一个图片前加0.2秒淡入
 ffmpeg -f lavfi -i anullsrc=channel_layout=stereo:sample_rate=44100 -loop 1 -f image2 -i Captions\frames\f-0.png -r 60 -t 3 -shortest cap0.mp4

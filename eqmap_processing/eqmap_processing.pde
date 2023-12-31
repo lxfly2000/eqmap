@@ -100,7 +100,7 @@ class EqEntry{
     
     il_posX=(int)webMercatorCalc.toScreenX(longitude);
     il_posY=(int)webMercatorCalc.toScreenY(latitude);
-    il_radius=3.54f*exp(0.45f*magnitude);
+    il_radius=5.31f*exp(0.45f*magnitude);
     il_rotation=0.38f*sqrt(80.0f*depth);
     il_alpha=255;
     il_red=(int)(255.0f*exp(depth*(-0.02f)));
@@ -131,27 +131,27 @@ ArrayList<EqEntry>eq;
 int eqIndex=0,eqDismissIndex=0;
 GregorianCalendar nowDateTime,endDateTime;
 PFont fontBold,fontRegular;
-float fszTime=48.0f,fszCounter=36.0f,fszLogStr=24.0f;
+float fszTime=72.0f,fszCounter=54.0f,fszLogStr=36.0f;
 PImage bg;
 PGraphics statLine,statLineShadow,statPoint;
 String[]weekString={"(日/Sun)","(一/Mon)","(二/Tue)","(三/Wed)","(四/Thu)","(五/Fri)","(六/Sat)"};
-float statLineLeft=40.0f,statLineRight=1260.0f,statLineTop=40.0f,statLineBottom=700.0f;
-float logStrLeft=580.0f,logStrRight=1260.0f,logStrBottom=700.0f;
+float statLineLeft=60.0f,statLineRight=1890.0f,statLineTop=60.0f,statLineBottom=1050.0f;
+float logStrLeft=870.0f,logStrRight=1890.0f,logStrBottom=1050.0f;
 long totalMinutes,totalFrames;
 long elapsedMinutes=0;
 float lastStatLineX,lastStatLineY;
 int frameLeftStrTotalCount=600;
 int yOffsetCounter=-4;
-int timeShadowDistance=4;
-int counterShadowDistance=3;
-int logShadowDistance=3;
+int timeShadowDistance=6;
+int counterShadowDistance=5;
+int logShadowDistance=5;
 ArrayList<Integer>logStrIndices;
 final float logStrSlideVY=1.0f;
 float logStrHeaderBottomToY;
 float logStrHeaderBottomCurrentY;
 final int maxLogStrIndices=5;
 ArrayList<Float>logStrEntryY;
-final float clipYOffset=2.0f;
+final float clipYOffset=3.0f;
 
 int calcMaxInt(double magnitude, double depth){
   double a = 1.65 * magnitude;
@@ -165,8 +165,8 @@ String calcMaxIntStr(int index){
 }
 
 void setup(){
-  size(1280,720);
-  //pixelDensity(displayDensity());
+  size(1920,1080);
+  pixelDensity(displayDensity());
   param=new Param();
   webMercatorCalc=new WebMercatorCalc();
   webMercatorCalc.Init();
@@ -178,8 +178,8 @@ void setup(){
   statLineShadow=createGraphics(width,height);
   statPoint=createGraphics(width,height);
   //Load Font
-  fontBold=createFont("sarasa-mono-sc-bold.ttf",48.0f);
-  fontRegular=createFont("sarasa-mono-sc-regular.ttf",36.0f);
+  fontBold=createFont("sarasa-mono-sc-bold.ttf",72.0f);
+  fontRegular=createFont("sarasa-mono-sc-regular.ttf",54.0f);
   //Load SFX
   sfx=new ArrayList<SoundFile>();
   eq=new ArrayList<EqEntry>();
@@ -249,7 +249,7 @@ void draw(){
         statPoint.beginDraw();
         statPoint.noStroke();
         statPoint.fill(color(240, 240, 12, 128));
-        statPoint.circle(eqe.il_posX,eqe.il_posY,2);
+        statPoint.circle(eqe.il_posX,eqe.il_posY,3);
         statPoint.endDraw();
   	}
     if(param.showLogStr){
@@ -278,12 +278,12 @@ void draw(){
   float sly=statLineBottom-(statLineBottom-statLineTop)*eqIndex/eq.size();
   statLine.beginDraw();
   statLine.stroke(color(240, 240, 12, 128));
-  statLine.strokeWeight(2);
+  statLine.strokeWeight(3);
   statLine.line(lastStatLineX,lastStatLineY,slx,sly);
   statLine.endDraw();
   statLineShadow.beginDraw();
   statLineShadow.stroke(color(32, 32, 6, 128));
-  statLineShadow.strokeWeight(2);
+  statLineShadow.strokeWeight(3);
   statLineShadow.line(lastStatLineX,lastStatLineY,slx,sly);
   statLineShadow.endDraw();
   //下面两句挪到圆圈图形与文字之间的部分去了
@@ -301,7 +301,7 @@ void draw(){
       continue;//小于param.minCircleMagnitude级的就没必要显示了
     }
     //阴影
-    strokeWeight(4.0f);
+    strokeWeight(6.0f);
     translate(eqe.il_posX,eqe.il_posY);
     stroke(0,0,0,eqe.il_alpha/1.7f);
     fill(eqe.il_red,eqe.il_green,eqe.il_blue,eqe.il_alpha*0.25f);
@@ -319,7 +319,7 @@ void draw(){
     line(0,0,eqe.il_radius,0);
     resetMatrix();
     //主图示
-    strokeWeight(2.5f);
+    strokeWeight(3.75f);
     translate(eqe.il_posX,eqe.il_posY);
     stroke(eqe.il_red,eqe.il_green,eqe.il_blue,eqe.il_alpha);
     circle(0,0,eqe.il_radius*2.0f);
@@ -330,7 +330,7 @@ void draw(){
     //fill(240,240,12,eqe.il_alpha);
     //circle(eqe.il_posX,eqe.il_posY,4);
   }
-  image(statLineShadow,2,2);
+  image(statLineShadow,3,3);
   image(statLine,0,0);
   //……文字部分
   textFont(fontBold);
@@ -348,7 +348,7 @@ void draw(){
         }
         textSize(eqe.il_fszMag);
         fill(32,32,6,eqe.il_alpha);
-        text(eqe.il_strMag,eqe.il_posX+2,eqe.il_posY+2);
+        text(eqe.il_strMag,eqe.il_posX+3,eqe.il_posY+3);
         fill(240,240,12,eqe.il_alpha);
         text(eqe.il_strMag,eqe.il_posX,eqe.il_posY);
       }
@@ -367,9 +367,9 @@ void draw(){
     nowDateTime.get(GregorianCalendar.MINUTE),
     param.timeZoneDesc);
   fill(40, 40, 40, 150);
-  text(timeStr,30+timeShadowDistance,60+timeShadowDistance);
+  text(timeStr,45+timeShadowDistance,90+timeShadowDistance);
   fill(255, 255, 255, 255);
-  text(timeStr,30,60);
+  text(timeStr,45,90);
   //显示右下角记录
   textFont(fontRegular);
   if(param.showLogStr){

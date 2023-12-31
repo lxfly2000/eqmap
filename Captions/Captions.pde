@@ -2,10 +2,10 @@ PFont fontRegular,fontBold;
 int captionNumber=0,lastCaptionNumber=0;
 
 void setup(){
-  size(1280,720);
-  //pixelDensity(displayDensity());
-  fontRegular=createFont("思源黑体 HW",22.0f);
-  fontBold=createFont("思源黑体 HW Bold",22.0f);
+  size(1920,1080);
+  pixelDensity(displayDensity());
+  fontRegular=createFont("../eqmap_processing/data/sarasa-mono-sc-regular.ttf",33.0f);
+  fontBold=createFont("../eqmap_processing/data/sarasa-mono-sc-bold.ttf",33.0f);
 }
 
 void draw(){
@@ -33,61 +33,61 @@ void keyPressed(){
 void caption0(){
   textFont(fontRegular);
   fill(255,255,255);
-  textSize(72);
+  textSize(108);
   textAlign(LEFT,TOP);
-  int top=150,left=80;
-  text("中国及周边地区地震分布",left,top);
-  textSize(48);
-  top+=72*1.5;
-  text("Earthquake Records in China and Nearby Regions\n",left,top);
-  textSize(48);
-  top+=48*3*1.5;
-  text("2010-1-1 ～ 2020-1-1",left,top);
+  int top=225,left=120;
+  text("中国及周边地区地震分布(速报数据)",left,top);
+  textSize(72);
+  top+=108*1.5;
+  text("Earthquake Records in China and Nearby Regions\n(Quick Report Data)",left,top);
+  textSize(72);
+  top+=72*3*1.5;
+  text("2020-1-1 ～ 2024-1-1",left,top);
 }
 
 void caption1(){
   textFont(fontRegular);
   fill(255,255,255);
-  textSize(48);
+  textSize(72);
   textAlign(LEFT,TOP);
-  int top=55,left=50;
-  text("数据来源：地震科学专业知识服务系统",left,top);
-  textSize(36);
-  top+=48*1.5;
-  text("Data Source: Earthquake Science Knowledge Service System",left,top);
+  int top=83,left=75;
+  text("数据来源：国家地震科学数据中心",left,top);
+  textSize(54);
+  top+=72*1.5;
+  text("Data Source: National Earthquake Data Center",left,top);
   color linkColor=color(255,227,8);
   fill(linkColor);
-  top+=36*1.5;
+  top+=54*1.5;
   translate(left,top);
-  scale(0.85,1);
-  String linkStr="http://earthquake.ckcest.cn/dzcestsc/earthquake_tyml.html";
+  scale(1,1);
+  String linkStr="https://data.earthquake.cn/gcywfl/index.html";
   text(linkStr,0,0);
   fill(255,64,154);
   text("(要登录/Login Required)",textWidth(linkStr),0);
   resetMatrix();
-  textSize(48);
+  textSize(72);
   fill(255,255,255);
-  top+=36*2;
+  top+=54*2;
   text("地图来源 / Map Source:",left,top);
-  textSize(36);
-  top+=48*1.5;
+  textSize(54);
+  top+=72*1.5;
   text("使用中国地图的正确姿势                NASA Visible Earth",left,top);
   fill(linkColor);
-  top+=36*1.5;
+  top+=54*1.5;
   text("https://zhuanlan.zhihu.com/p/25634886 https://visibleearth.nasa.gov",left,top);
-  textSize(48);
+  textSize(72);
   fill(255,255,255);
-  top+=36*2;
+  top+=54*2;
   text("＊本视频不能作为任何科学研究的依据，\n　仅为个人学习之用。",left,top);
-  textSize(36);
-  top+=48*2*1.5;
+  textSize(54);
+  top+=72*2*1.5;
   text("＊ This video cannot be used for any kinds of research and is\n　 intended only for personal studying.",left,top);
 }
 
 void DrawCircle(float x,float y,float magnitude,float depth){
   //图形部分
-  strokeWeight(4.0f);
-  float radius=3.54f*exp(0.45f*magnitude);
+  strokeWeight(6.0f);
+  float radius=5.31f*exp(0.45f*magnitude);
   //阴影
   translate(x,y);
   stroke(0,0,0,150);
@@ -104,7 +104,7 @@ void DrawCircle(float x,float y,float magnitude,float depth){
   rotate(radians(0.38f*sqrt(80.0f*depth)));
   line(0,0,radius,0);
   resetMatrix();
-  strokeWeight(2.5f);
+  strokeWeight(3.75f);
   stroke((int)(255.0f*exp(depth*(-0.02f))),(int)(16.0f*exp(depth*(-0.02f))),(int)(8.0f*exp(depth*(-0.02f))));
   noFill();
   //float radius=3.54f*exp(0.45f*magnitude);
@@ -121,63 +121,63 @@ void DrawCircleText(float x,float y,float magnitude,float depth){
   }
   textFont(fontBold);
   textAlign(CENTER,BASELINE);
-  float radius=3.54f*exp(0.45f*magnitude);
+  float radius=5.31f*exp(0.45f*magnitude);
   textSize(radius*0.6);
   fill(32,32,6);
-  text(String.format("%.1f",magnitude),x+2,y+2);
+  text(String.format("%.1f",magnitude),x+3,y+3);
   fill(240,240,12);
   text(String.format("%.1f",magnitude),x,y);
 }
 
 void caption2(int testSound){
   fill(255,255,255);
-  textSize(48);
+  textSize(72);
   textAlign(LEFT,TOP);
-  int top=55,left=50;
+  int top=83,left=75;
   text("震级 (Magnitude)",left,top);
   float smpMags[]={3,4,5,7,8.7f};
   for(int i=0;i<5;i++){
     textFont(fontBold);
     //strokeWeight(3);
-    DrawCircle(width*(i+1)/6,top+150,smpMags[i],0);
+    DrawCircle(width*(i+1)/6,top+225,smpMags[i],0);
   }
   for(int i=0;i<5;i++){
     textFont(fontBold);
-    strokeWeight(3);
-    DrawCircleText(width*(i+1)/6,top+150,smpMags[i],0);
+    strokeWeight(4.5f);
+    DrawCircleText(width*(i+1)/6,top+225,smpMags[i],0);
     textAlign(CENTER,CENTER);
     textFont(fontRegular);
     fill(255,255,255);
-    textSize(48);
+    textSize(72);
     if(i+1==testSound){
-      text("["+String.valueOf(smpMags[i])+"]",width*(i+1)/6,top+250);
+      text("["+String.valueOf(smpMags[i])+"]",width*(i+1)/6,top+375);
     }else{
-      text(String.valueOf(smpMags[i]),width*(i+1)/6,top+250);
+      text(String.valueOf(smpMags[i]),width*(i+1)/6,top+375);
     }
   }
   fill(255,255,255);
-  textSize(48);
+  textSize(72);
   textAlign(LEFT,TOP);
-  top+=330;
+  top+=495;
   text("深度 (Depth)",left,top);
   int smpDepths[]={10,50,100,300,500};
   for(int i=0;i<5;i++){
     textFont(fontBold);
-    strokeWeight(3);
-    DrawCircle(width*(i+1)/6,top+150,7,smpDepths[i]);
+    strokeWeight(4.5f);
+    DrawCircle(width*(i+1)/6,top+225,7,smpDepths[i]);
   }
   for(int i=0;i<5;i++){
     textFont(fontBold);
-    strokeWeight(3);
-    DrawCircleText(width*(i+1)/6,top+150,7,smpDepths[i]);
+    strokeWeight(4.5f);
+    DrawCircleText(width*(i+1)/6,top+225,7,smpDepths[i]);
     textAlign(CENTER,CENTER);
     textFont(fontRegular);
     fill(255,255,255);
-    textSize(48);
+    textSize(72);
     if(i+6==testSound){
-      text("["+String.format("%dkm",smpDepths[i])+"]",width*(i+1)/6,top+250);
+      text("["+String.format("%dkm",smpDepths[i])+"]",width*(i+1)/6,top+375);
     }else{
-      text(String.format("%dkm",smpDepths[i]),width*(i+1)/6,top+250);
+      text(String.format("%dkm",smpDepths[i]),width*(i+1)/6,top+375);
     }
   }
 }
@@ -185,25 +185,33 @@ void caption2(int testSound){
 void caption3(){
   textFont(fontRegular);
   fill(255,255,255);
-  textSize(48);
+  textSize(72);
   textAlign(LEFT,TOP);
-  int top=55,left=50;
+  int top=83,left=75;
   text("制作：lxfly2000",left,top);
-  textSize(36);
-  top+=48*1.5;
+  textSize(54);
+  top+=72*1.5;
   text("Made by: lxfly2000",left,top);
   color linkColor=color(255,227,8);
-  top+=36*2;
-  textSize(48);
+  top+=54*2;
+  textSize(72);
   text("使用工具：ArcGIS, Processing, FFmpeg",left,top);
-  textSize(36);
-  top+=48*1.5;
+  textSize(54);
+  top+=72*1.5;
   text("Using Tools: ArcGIS, Processing, FFmpeg",left,top);
-  top+=36*2*1.5;
-  textSize(48);
-  text("参考视频 / Reference Video:\n日本の地震 Japan Earthquakes 2016-03-01",left,top);
-  textSize(36);
-  top+=48*2*1.5;
+  top+=54*2*1.5;
+  textSize(72);
+  text("参考资料 / Reference Data:\n日本の地震 Japan Earthquakes 2016-03-01",left,top);
+  textSize(54);
+  top+=72*2*1.3;
   fill(linkColor);
   text("https://youtu.be/1jCXdatTHNQ",left,top);
+  top+=54*1.5;
+  textSize(72);
+  fill(255,255,255);
+  text("CENC Earthquake List",left,top);
+  textSize(54);
+  top+=72*1.5;
+  fill(linkColor);
+  text("https://github.com/Project-BS-CN/CENC-Earthquake-List",left,top);
 }
